@@ -1,0 +1,104 @@
+// Math Hunters database schema
+// MVP currently uses localStorage; this schema is ready for the auth/persistence phase.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String?
+  googleId      String?   @unique
+  name          String?
+  grade         Int?
+  xp            Int       @default(0)
+  level         Int       @default(1)
+  streak        Int       @default(0)
+  lastActiveAt  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  progress      UserProgress[]
+  quizResults   QuizResult[]
+  badges        UserBadge[]
+}
+
+model Topic {
+  id            String   @id
+  grade         Int
+  subject       String
+  title         String
+  titleRu       String?
+  iconFormula   String?
+  orderIndex    Int      @default(0)
+  isActive      Boolean  @default(true)
+
+  progress      UserProgress[]
+  quizResults   QuizResult[]
+  videos        TopicVideo[]
+}
+
+model UserProgress {
+  id                 String   @id @default(uuid())
+  userId             String
+  topicId            String
+  completed          Boolean  @default(false)
+  timeSpentSeconds   Int      @default(0)
+  attempts           Int      @default(0)
+  xpGained           Int      @default(0)
+  updatedAt          DateTime @updatedAt
+
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic              Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, topicId])
+}
+
+model QuizResult {
+  id          String   @id @default(uuid())
+  userId      String
+  topicId     String
+  score       Int
+  total       Int
+  takenAt     DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic       Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+model TopicVideo {
+  id              String  @id @default(uuid())
+  topicId         String
+  youtubeVideoId  String
+  title           String?
+  isPrimary       Boolean @default(false)
+
+  topic           Topic   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+model Badge {
+  id              String   @id @default(uuid())
+  name            String   @unique
+  description     String?
+  iconUrl         String?
+  ruleType        String?
+
+  earnedBy        UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  badgeId   String
+  earnedAt  DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+}

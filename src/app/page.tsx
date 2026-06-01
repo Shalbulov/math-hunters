@@ -1,65 +1,104 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { CURRICULUM } from "@/lib/curriculum";
+import { Sparkles, Video, Trophy, Bot } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <Header />
+      <main className="flex-1">
+        <section className="max-w-7xl mx-auto px-6 py-20 md:py-28 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent-blue/40 text-accent-blue text-xs mb-6">
+            <Sparkles size={14} /> Gemini AI tutor · Free tier
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+            MATH <span className="text-accent-blue text-glow-blue">HUNTERS</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-6 text-lg md:text-xl text-text-secondary max-w-2xl mx-auto">
+            Master Kazakhstan grades 7–11 mathematics with AI-powered tutoring,
+            curated video lessons, and gamified quizzes.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <Link
+              href="/grades"
+              className="px-8 py-3 rounded-md bg-accent-blue text-primary-dark font-semibold hover:bg-accent-light transition-colors glow-blue"
+            >
+              Start learning free
+            </Link>
+            <Link
+              href="/register"
+              className="px-8 py-3 rounded-md border-2 border-accent-blue text-accent-blue font-semibold hover:bg-accent-blue/10 transition-colors"
+            >
+              Create account
+            </Link>
+          </div>
+
+          <div id="how" className="mt-20 grid md:grid-cols-3 gap-6 text-left">
+            <Feature
+              icon={<Bot className="text-accent-blue" size={28} />}
+              title="AI Tutor"
+              text="Step-by-step explanations on demand, aligned to the Kazakhstan syllabus."
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            <Feature
+              icon={<Video className="text-accent-blue" size={28} />}
+              title="Video Lessons"
+              text="Curated YouTube lessons embedded right next to each topic's theory."
+            />
+            <Feature
+              icon={<Trophy className="text-accent-blue" size={28} />}
+              title="Gamified Learning"
+              text="Earn XP, level up Hunter ranks, unlock badges, and build streaks."
+            />
+          </div>
+        </section>
+
+        <section className="border-t border-border-default bg-primary/30">
+          <div className="max-w-7xl mx-auto px-6 py-16">
+            <h2 className="text-3xl font-bold mb-2">Pick your grade</h2>
+            <p className="text-text-secondary mb-8">
+              Topics aligned with the Kazakhstan national curriculum.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {CURRICULUM.map((g) => (
+                <Link
+                  key={g.grade}
+                  href={`/grades/${g.grade}`}
+                  className="group relative rounded-lg bg-primary border border-border-default p-5 hover:border-accent-blue transition-colors"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-accent-blue rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="text-xs text-text-secondary">Grade</div>
+                  <div className="text-4xl font-bold text-accent-blue">{g.grade}</div>
+                  <div className="mt-3 text-xs text-text-secondary line-clamp-2">
+                    {g.description}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
+      <Footer />
+    </>
+  );
+}
+
+function Feature({
+  icon,
+  title,
+  text,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="relative rounded-lg bg-primary border border-border-default p-6">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-accent-blue rounded-t-lg" />
+      <div className="mb-4">{icon}</div>
+      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+      <p className="text-text-secondary text-sm">{text}</p>
     </div>
   );
 }
