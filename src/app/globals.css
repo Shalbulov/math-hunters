@@ -192,3 +192,14 @@ html, body {
   stroke-dashoffset: 1000;
   animation: sparkline-draw 1.2s ease-out 0.2s forwards;
 }
+
+/* Marquee of math glyphs at bottom of landing */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll 50s linear infinite;
+  display: flex;
+  width: max-content;
+}
