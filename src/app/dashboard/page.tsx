@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { XPBar } from "@/components/XPBar";
 import { loadState, xpForLevel, type UserState } from "@/lib/store";
-import { allTopics, findTopic } from "@/lib/curriculum";
-import { Award, BookCheck, Flame, Trophy, Zap } from "lucide-react";
+import { allTopics, CURRICULUM, findTopic } from "@/lib/curriculum";
+import { Flame, ArrowRight, Zap } from "lucide-react";
 
 export default function Dashboard() {
   const [state, setState] = useState<UserState | null>(null);
@@ -22,12 +23,19 @@ export default function Dashboard() {
 
   const totalTopics = allTopics().length;
   const completedCount = state.completedTopics.length;
-  const quizCount = Object.keys(state.quizResults).length;
   const xpNeeded = xpForLevel(state.level);
-  const xpProgress = (state.xp / xpNeeded) * 100;
 
-  const lastFive = state.completedTopics
-    .slice(-5)
+  // pick next mission: first not-completed topic in user's grade
+  const userGrade = state.grade || 7;
+  const gradeData = CURRICULUM.find((g) => g.grade === userGrade) || CURRICULUM[0];
+  const nextTopic =
+    gradeData.subjects
+      .flatMap((s) => s.topics)
+      .find((t) => !state.completedTopics.includes(t.id)) ||
+    gradeData.subjects[0].topics[0];
+
+  const lastThree = state.completedTopics
+    .slice(-3)
     .reverse()
     .map((id) => findTopic(id))
     .filter(Boolean);
@@ -35,135 +43,155 @@ export default function Dashboard() {
   return (
     <>
       <Header />
-      <main className="flex-1 max-w-7xl mx-auto px-6 py-10 w-full">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">
-            Welcome back{state.name ? `, ${state.name}` : ""}!
-          </h1>
-          <p className="text-text-secondary mt-1">
-            Level {state.level} Hunter ·{" "}
-            <span className="text-accent-blue">{state.xp}</span> / {xpNeeded} XP
-            {state.streak > 0 && (
-              <>
-                {" "}· <Flame className="inline text-warning" size={14} />{" "}
-                {state.streak}-day streak
-              </>
-            )}
-          </p>
-          <div className="h-2 bg-primary rounded-full overflow-hidden mt-4 max-w-md">
-            <div
-              className="h-full bg-accent-blue transition-all duration-500"
-              style={{ width: `${Math.min(100, xpProgress)}%` }}
-            />
-          </div>
-        </div>
+      <main className="flex-1 max-w-[720px] mx-auto px-4 md:px-0 pt-6 pb-16 w-full">
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          <StatCard
-            icon={<BookCheck className="text-accent-blue" size={20} />}
-            label="Topics"
-            value={`${completedCount}/${totalTopics}`}
-          />
-          <StatCard
-            icon={<Trophy className="text-accent-blue" size={20} />}
-            label="Quizzes"
-            value={String(quizCount)}
-          />
-          <StatCard
-            icon={<Zap className="text-accent-blue" size={20} />}
-            label="Total XP"
-            value={String(state.xp + (state.level - 1) * 300)}
-          />
-          <StatCard
-            icon={<Award className="text-accent-blue" size={20} />}
-            label="Badges"
-            value={String(state.badges.length)}
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="rounded-lg bg-primary border border-border-default p-5">
-            <h2 className="font-semibold mb-4">Recent activity</h2>
-            {lastFive.length === 0 ? (
-              <div className="text-text-secondary text-sm">
-                No completed topics yet.{" "}
-                <Link href="/grades" className="text-accent-blue hover:underline">
-                  Start learning
-                </Link>
+        <section className="relative overflow-hidden border border-border-default bg-surface mb-6">
+          <div className="absolute inset-0 pixel-grid opacity-40" />
+          <div className="relative p-5 md:p-6">
+            <div className="flex items-start justify-between mb-1">
+              <div className="font-display text-[10px] tracking-[0.25em] text-text-muted">
+                ◢ HUNTER {state.name?.toUpperCase() || "ANON"}
               </div>
-            ) : (
-              <ul className="space-y-2">
-                {lastFive.map(
-                  (f) =>
-                    f && (
-                      <li key={f.topic.id} className="flex items-center gap-2 text-sm">
-                        <BookCheck className="text-success" size={16} />
-                        <Link
-                          href={`/topics/${f.topic.id}`}
-                          className="hover:text-accent-blue"
-                        >
-                          {f.topic.title}
-                        </Link>
-                        <span className="text-text-secondary text-xs ml-auto">
+              {state.streak > 0 && (
+                <div className="flex items-center gap-1.5">
+                  <Flame className="text-warning flame-flicker" size={16} />
+                  <span className="scoreboard text-xl text-warning">{state.streak}</span>
+                  <span className="font-display text-[10px] tracking-wider text-text-muted mt-1">
+                    DAYS
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-end justify-between gap-3 mt-4">
+              <div>
+                <div className="font-display text-[10px] tracking-[0.25em] text-text-muted mb-1">
+                  XP
+                </div>
+                <div className="scoreboard text-[72px] md:text-[96px] text-text-primary leading-[0.85]">
+                  {state.xp}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="font-display text-[10px] tracking-[0.25em] text-text-muted mb-1">
+                  LVL
+                </div>
+                <div className="scoreboard text-[72px] md:text-[96px] text-accent leading-[0.85] text-glow-cyan">
+                  {state.level}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <XPBar current={state.xp} target={xpNeeded} />
+              <div className="mt-2 flex justify-between text-[10px] font-display tracking-wider text-text-muted">
+                <span>0</span>
+                <span>{Math.round(xpNeeded / 4)}</span>
+                <span>{Math.round(xpNeeded / 2)}</span>
+                <span>{Math.round((xpNeeded * 3) / 4)}</span>
+                <span className="text-accent">{xpNeeded}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <Link
+          href={`/topics/${nextTopic.id}`}
+          className="group relative overflow-hidden block border border-accent bg-surface-elev mb-6 transition-transform hover:translate-x-0.5 hover:-translate-y-0.5"
+        >
+          <div className="absolute inset-0 pixel-grid-fine opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/5 to-accent/15" />
+          <div className="relative p-5 md:p-6 flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <div className="font-display text-[10px] tracking-[0.25em] text-accent mb-2">
+                ◢ TODAY'S MISSION
+              </div>
+              <h2 className="font-display text-2xl md:text-3xl font-bold leading-tight truncate">
+                {nextTopic.title}
+              </h2>
+              <div className="mt-2 flex items-center gap-3 text-xs">
+                <span className="text-text-muted font-display tracking-wider">
+                  GRADE {userGrade}
+                </span>
+                <span className="w-1 h-1 bg-text-muted rounded-full" />
+                <span className="text-accent font-display tracking-wider">
+                  +{50 + nextTopic.quiz.length * 5} XP
+                </span>
+              </div>
+            </div>
+            <div className="font-display text-accent flex-shrink-0 transition-transform group-hover:translate-x-1">
+              <ArrowRight size={28} strokeWidth={2.5} />
+            </div>
+          </div>
+        </Link>
+
+        <div className="grid grid-cols-3 gap-2 mb-6">
+          <StatBlock label="TOPICS" value={`${completedCount}`} sub={`/${totalTopics}`} />
+          <StatBlock label="QUIZZES" value={`${Object.keys(state.quizResults).length}`} />
+          <StatBlock label="BADGES" value={`${state.badges.length}`} />
+        </div>
+
+        <section className="border border-border-default bg-surface">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-border-default">
+            <div className="font-display text-[10px] tracking-[0.25em] text-text-muted">
+              ◢ RECENT
+            </div>
+            <Link
+              href="/profile"
+              className="font-display text-[10px] tracking-wider text-accent hover:text-text-primary transition-colors"
+            >
+              VIEW ALL →
+            </Link>
+          </div>
+          {lastThree.length === 0 ? (
+            <div className="px-5 py-8 text-center text-text-secondary text-sm">
+              No completed topics yet.{" "}
+              <Link href="/grades" className="text-accent">
+                Start the hunt
+              </Link>
+            </div>
+          ) : (
+            <ul className="divide-y divide-border-default">
+              {lastThree.map(
+                (f) =>
+                  f && (
+                    <li key={f.topic.id}>
+                      <Link
+                        href={`/topics/${f.topic.id}`}
+                        className="flex items-center justify-between px-5 py-4 hover:bg-surface-elev transition-colors"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <Zap size={14} className="text-accent flex-shrink-0" />
+                          <span className="font-display truncate">{f.topic.title}</span>
+                        </div>
+                        <span className="font-display text-[10px] tracking-wider text-text-muted flex-shrink-0">
                           G{f.grade}
                         </span>
-                      </li>
-                    ),
-                )}
-              </ul>
-            )}
-          </div>
-
-          <div className="rounded-lg bg-primary border border-border-default p-5">
-            <h2 className="font-semibold mb-4">Badges</h2>
-            {state.badges.length === 0 ? (
-              <p className="text-text-secondary text-sm">
-                No badges yet — complete topics and quizzes to earn them.
-              </p>
-            ) : (
-              <div className="flex flex-wrap gap-2">
-                {state.badges.map((b) => (
-                  <span
-                    key={b}
-                    className="px-3 py-1.5 rounded-full bg-accent-blue/10 border border-accent-blue/40 text-accent-blue text-xs flex items-center gap-1"
-                  >
-                    <Award size={12} /> {b}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-8">
-          <Link
-            href={state.grade ? `/grades/${state.grade}` : "/grades"}
-            className="inline-block px-6 py-3 rounded-md bg-accent-blue text-primary-dark font-medium hover:bg-accent-light transition-colors"
-          >
-            Continue learning →
-          </Link>
-        </div>
+                      </Link>
+                    </li>
+                  ),
+              )}
+            </ul>
+          )}
+        </section>
       </main>
       <Footer />
     </>
   );
 }
 
-function StatCard({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
+function StatBlock({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
-    <div className="rounded-lg bg-primary border border-border-default p-5 relative">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-accent-blue rounded-t-lg" />
-      <div className="mb-2">{icon}</div>
-      <div className="text-2xl font-bold">{value}</div>
-      <div className="text-xs text-text-secondary">{label}</div>
+    <div className="relative border border-border-default bg-surface p-4">
+      <div className="font-display text-[10px] tracking-[0.25em] text-text-muted mb-1">
+        {label}
+      </div>
+      <div className="flex items-baseline gap-1">
+        <span className="scoreboard text-3xl text-text-primary">{value}</span>
+        {sub && (
+          <span className="font-display text-xs text-text-muted">{sub}</span>
+        )}
+      </div>
     </div>
   );
 }

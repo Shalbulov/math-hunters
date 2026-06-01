@@ -2,79 +2,79 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CURRICULUM } from "@/lib/curriculum";
-import { Sparkles, Video, Trophy, Bot } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
     <>
       <Header />
       <main className="flex-1">
-        <section className="max-w-7xl mx-auto px-6 py-20 md:py-28 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent-blue/40 text-accent-blue text-xs mb-6">
-            <Sparkles size={14} /> Gemini AI tutor · Free tier
-          </div>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-            MATH <span className="text-accent-blue text-glow-blue">HUNTERS</span>
-          </h1>
-          <p className="mt-6 text-lg md:text-xl text-text-secondary max-w-2xl mx-auto">
-            Master Kazakhstan grades 7–11 mathematics with AI-powered tutoring,
-            curated video lessons, and gamified quizzes.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center">
-            <Link
-              href="/grades"
-              className="px-8 py-3 rounded-md bg-accent-blue text-primary-dark font-semibold hover:bg-accent-light transition-colors glow-blue"
-            >
-              Start learning free
-            </Link>
-            <Link
-              href="/register"
-              className="px-8 py-3 rounded-md border-2 border-accent-blue text-accent-blue font-semibold hover:bg-accent-blue/10 transition-colors"
-            >
-              Create account
-            </Link>
-          </div>
-
-          <div id="how" className="mt-20 grid md:grid-cols-3 gap-6 text-left">
-            <Feature
-              icon={<Bot className="text-accent-blue" size={28} />}
-              title="AI Tutor"
-              text="Step-by-step explanations on demand, aligned to the Kazakhstan syllabus."
-            />
-            <Feature
-              icon={<Video className="text-accent-blue" size={28} />}
-              title="Video Lessons"
-              text="Curated YouTube lessons embedded right next to each topic's theory."
-            />
-            <Feature
-              icon={<Trophy className="text-accent-blue" size={28} />}
-              title="Gamified Learning"
-              text="Earn XP, level up Hunter ranks, unlock badges, and build streaks."
-            />
+        <section className="relative">
+          <div className="absolute inset-0 pixel-grid opacity-50 [mask-image:linear-gradient(180deg,#000,transparent_85%)]" />
+          <div className="relative max-w-[720px] mx-auto px-4 md:px-0 pt-14 md:pt-20 pb-16">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 border border-accent/30 text-accent text-[11px] tracking-wider font-display mb-8">
+              <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+              GEMINI 2.5 FLASH · LIVE
+            </div>
+            <h1 className="font-display text-[56px] md:text-[88px] leading-[0.95] tracking-[-0.03em] font-bold">
+              HUNT<br />
+              YOUR<br />
+              <span className="text-accent text-glow-cyan">MATH<span className="text-text-primary">.</span></span>
+            </h1>
+            <p className="mt-6 text-[15px] text-text-secondary max-w-md leading-relaxed">
+              Grade 7–11 Kazakhstan curriculum. Built like the games you already play —
+              streaks, ranks, instant feedback. No filler.
+            </p>
+            <div className="mt-10 flex items-center gap-3">
+              <Link
+                href="/onboarding"
+                className="font-display text-base px-6 py-3 bg-accent text-bg font-bold hover:bg-accent-dim transition-colors inline-flex items-center gap-2"
+              >
+                START HUNT <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="/grades"
+                className="font-display text-base px-6 py-3 border border-border-light text-text-primary hover:border-accent transition-colors"
+              >
+                BROWSE
+              </Link>
+            </div>
           </div>
         </section>
 
-        <section className="border-t border-border-default bg-primary/30">
-          <div className="max-w-7xl mx-auto px-6 py-16">
-            <h2 className="text-3xl font-bold mb-2">Pick your grade</h2>
-            <p className="text-text-secondary mb-8">
-              Topics aligned with the Kazakhstan national curriculum.
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <section className="border-t border-border-default">
+          <div className="max-w-[720px] mx-auto px-4 md:px-0 py-14">
+            <div className="font-display text-[11px] tracking-[0.2em] text-text-muted mb-6">
+              ◢ PICK YOUR GRADE
+            </div>
+            <div className="grid grid-cols-5 gap-2">
               {CURRICULUM.map((g) => (
                 <Link
                   key={g.grade}
                   href={`/grades/${g.grade}`}
-                  className="group relative rounded-lg bg-primary border border-border-default p-5 hover:border-accent-blue transition-colors"
+                  className="group relative aspect-square border border-border-default bg-surface hover:border-accent transition-colors flex flex-col items-center justify-center"
                 >
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-accent-blue rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="text-xs text-text-secondary">Grade</div>
-                  <div className="text-4xl font-bold text-accent-blue">{g.grade}</div>
-                  <div className="mt-3 text-xs text-text-secondary line-clamp-2">
-                    {g.description}
+                  <div className="scoreboard text-3xl md:text-5xl text-text-primary group-hover:text-accent transition-colors">
+                    {g.grade}
+                  </div>
+                  <div className="font-display text-[9px] tracking-wider text-text-muted mt-1">
+                    GRADE
                   </div>
                 </Link>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-border-default">
+          <div className="max-w-[720px] mx-auto px-4 md:px-0 py-14">
+            <div className="font-display text-[11px] tracking-[0.2em] text-text-muted mb-6">
+              ◢ HOW IT FEELS
+            </div>
+            <div className="space-y-px bg-border-default">
+              <FeatureRow num="01" title="Tutor on tap" body="Gemini explains every step. Ask anything mid-lesson." />
+              <FeatureRow num="02" title="Earn ranks" body="XP, levels, streaks. Hunter 1 → 100." />
+              <FeatureRow num="03" title="Real videos" body="Curated Khan Academy + Organic Chemistry Tutor." />
             </div>
           </div>
         </section>
@@ -84,21 +84,14 @@ export default function Home() {
   );
 }
 
-function Feature({
-  icon,
-  title,
-  text,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-}) {
+function FeatureRow({ num, title, body }: { num: string; title: string; body: string }) {
   return (
-    <div className="relative rounded-lg bg-primary border border-border-default p-6">
-      <div className="absolute top-0 left-0 right-0 h-1 bg-accent-blue rounded-t-lg" />
-      <div className="mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-text-secondary text-sm">{text}</p>
+    <div className="bg-surface px-5 py-6 flex items-baseline gap-6">
+      <span className="scoreboard text-2xl text-accent w-10 flex-shrink-0">{num}</span>
+      <div>
+        <h3 className="font-display text-lg mb-1">{title}</h3>
+        <p className="text-sm text-text-secondary">{body}</p>
+      </div>
     </div>
   );
 }

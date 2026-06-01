@@ -4,7 +4,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CURRICULUM, findGrade } from "@/lib/curriculum";
 import { MathInline } from "@/components/Math";
-import { ChevronRight } from "lucide-react";
 
 export function generateStaticParams() {
   return CURRICULUM.map((g) => ({ grade: String(g.grade) }));
@@ -22,44 +21,57 @@ export default async function GradePage({
   return (
     <>
       <Header />
-      <main className="flex-1 max-w-7xl mx-auto px-6 py-12 w-full">
-        <div className="text-sm text-text-secondary mb-2">
-          <Link href="/grades" className="hover:text-accent-blue">
-            Grades
+      <main className="flex-1 max-w-[720px] mx-auto px-4 md:px-0 pt-8 pb-12 w-full">
+        <div className="text-xs text-text-muted mb-3 font-display tracking-wider">
+          <Link href="/grades" className="hover:text-accent">
+            GRADES
           </Link>{" "}
-          / Grade {g.grade}
+          / G{g.grade}
         </div>
-        <h1 className="text-4xl font-bold mb-2">Grade {g.grade}</h1>
-        <p className="text-text-secondary mb-10">{g.description}</p>
 
-        <div className="space-y-10">
+        <div className="flex items-end gap-4 mb-2">
+          <span className="scoreboard text-7xl md:text-8xl text-accent leading-[0.85]">
+            {g.grade}
+          </span>
+          <div className="pb-2">
+            <div className="font-display text-[10px] tracking-[0.25em] text-text-muted">
+              GRADE
+            </div>
+            <h1 className="font-display text-2xl font-bold leading-tight">
+              {g.description}
+            </h1>
+          </div>
+        </div>
+
+        <div className="mt-10 space-y-8">
           {g.subjects.map((subj) => (
             <section key={subj.id}>
-              <h2 className="text-2xl font-semibold mb-4 text-accent-blue">
-                {subj.name}
-              </h2>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="font-display text-[10px] tracking-[0.25em] text-accent">
+                  ◢ {subj.name.toUpperCase()}
+                </div>
+                <div className="flex-1 h-px bg-border-default" />
+                <div className="text-xs text-text-muted font-display tracking-wider">
+                  {subj.topics.length}
+                </div>
+              </div>
+              <div className="space-y-px bg-border-default">
                 {subj.topics.map((t) => (
                   <Link
                     key={t.id}
                     href={`/topics/${t.id}`}
-                    className="group relative rounded-lg bg-primary border border-border-default p-5 hover:border-accent-blue transition-colors flex items-start justify-between gap-4"
+                    className="group bg-surface flex items-center gap-4 px-4 py-4 hover:bg-surface-elev transition-colors"
                   >
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-accent-blue rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="font-math text-accent-blue text-sm px-2 py-0.5 rounded bg-primary-dark border border-border-default">
-                          <MathInline>{t.icon}</MathInline>
-                        </span>
-                        <h3 className="font-semibold">{t.title}</h3>
-                      </div>
-                      <p className="text-sm text-text-secondary">{t.summary}</p>
-                      <p className="text-xs text-text-muted mt-1">{t.titleRu}</p>
+                    <span className="font-math text-accent text-base bg-bg border border-border-default px-2 py-1 min-w-[44px] text-center">
+                      <MathInline>{t.icon}</MathInline>
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-display font-semibold truncate">{t.title}</div>
+                      <div className="text-xs text-text-muted truncate">{t.summary}</div>
                     </div>
-                    <ChevronRight
-                      size={20}
-                      className="text-text-secondary group-hover:text-accent-blue transition-colors flex-shrink-0 mt-1"
-                    />
+                    <span className="font-display text-text-muted group-hover:text-accent transition-colors">
+                      →
+                    </span>
                   </Link>
                 ))}
               </div>

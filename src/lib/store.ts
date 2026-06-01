@@ -13,6 +13,8 @@ export type UserState = {
   completedTopics: string[];
   quizResults: Record<string, { score: number; total: number; passedAt: string }>;
   badges: string[];
+  /** xpHistory: array of { date: ISO yyyy-mm-dd, xp: number gained that day } */
+  xpHistory: { date: string; xp: number }[];
 };
 
 const DEFAULT: UserState = {
@@ -26,6 +28,7 @@ const DEFAULT: UserState = {
   completedTopics: [],
   quizResults: {},
   badges: [],
+  xpHistory: [],
 };
 
 export function loadState(): UserState {
@@ -49,9 +52,21 @@ export function xpForLevel(level: number) {
   return level * 300;
 }
 
+function recordXpDay(s: UserState, amount: number) {
+  const today = new Date().toISOString().slice(0, 10);
+  const last = s.xpHistory[s.xpHistory.length - 1];
+  if (last && last.date === today) {
+    last.xp += amount;
+  } else {
+    s.xpHistory.push({ date: today, xp: amount });
+  }
+  if (s.xpHistory.length > 60) s.xpHistory.shift();
+}
+
 export function gainXP(amount: number) {
   const s = loadState();
   s.xp += amount;
+  recordXpDay(s, amount);
   while (s.xp >= xpForLevel(s.level)) {
     s.xp -= xpForLevel(s.level);
     s.level += 1;
@@ -82,6 +97,7 @@ export function recordQuiz(topicId: string, score: number, total: number) {
   }
   const earned = passing ? 50 + score * 5 : score * 3;
   s.xp += earned;
+  recordXpDay(s, earned);
   while (s.xp >= xpForLevel(s.level)) {
     s.xp -= xpForLevel(s.level);
     s.level += 1;

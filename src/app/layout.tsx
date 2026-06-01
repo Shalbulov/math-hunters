@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -13,9 +20,9 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Math Hunters — AI-powered math tutor for grades 7–11",
+  title: "Math Hunters — Hunt grade 7–11 math like it's a game",
   description:
-    "Master Kazakhstan grades 7–11 mathematics with Gemini AI tutoring, video lessons, quizzes, and gamified progress.",
+    "Game-grade AI math for teens. Streaks, XP, Hunter ranks, Gemini tutor — Kazakhstan curriculum.",
   icons: {
     icon: "/favicon.svg",
   },
@@ -29,11 +36,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${inter.variable} ${syne.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-primary-dark text-text-primary">
-        {children}
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

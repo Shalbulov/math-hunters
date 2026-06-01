@@ -1,21 +1,16 @@
 export function Footer() {
   return (
-    <footer className="border-t border-border-default mt-16">
-      <div className="max-w-7xl mx-auto px-6 py-8 text-sm text-text-secondary flex flex-col md:flex-row items-center justify-between gap-3">
-        <div>
-          © {new Date().getFullYear()} Math Hunters · Made for grades 7–11 ·{" "}
-          <span className="text-accent-blue">Kazakhstan curriculum</span>
+    <footer className="border-t border-border-default mt-20">
+      <div className="max-w-[720px] mx-auto px-4 md:px-0 py-6 text-xs text-text-muted flex items-center justify-between">
+        <div className="font-display tracking-wider">
+          MATH<span className="text-accent">/</span>HUNTERS · {new Date().getFullYear()}
         </div>
-        <div className="flex items-center gap-4">
-          <a
-            href="https://github.com/Shalbulov/math-hunters"
-            className="hover:text-accent-blue transition-colors"
-          >
-            GitHub
-          </a>
-          <span>·</span>
-          <span>Powered by Gemini AI</span>
-        </div>
+        <a
+          href="https://github.com/Shalbulov/math-hunters"
+          className="hover:text-accent transition-colors"
+        >
+          github
+        </a>
       </div>
     </footer>
   );

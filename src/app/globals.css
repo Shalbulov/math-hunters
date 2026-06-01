@@ -2,29 +2,36 @@
 @import "katex/dist/katex.min.css";
 
 @theme inline {
-  --color-primary-dark: #0A192F;
-  --color-primary: #112240;
-  --color-primary-light: #1D2D44;
+  /* Neon arcade — near-black + electric cyan */
+  --color-bg: #05070F;
+  --color-surface: #0B1226;
+  --color-surface-elev: #131B33;
+  --color-surface-overlay: #1A2440;
 
-  --color-accent-blue: #00D4FF;
-  --color-accent-light: #4D9FE7;
+  --color-accent: #00E5FF;
+  --color-accent-dim: #00A8BD;
+  --color-accent-soft: rgba(0, 229, 255, 0.12);
 
   --color-text-primary: #FFFFFF;
-  --color-text-secondary: #8892B0;
-  --color-text-muted: #64748B;
+  --color-text-secondary: #8B95B5;
+  --color-text-muted: #4F5876;
 
-  --color-surface: #112240;
-  --color-surface-light: #1D2D44;
-  --color-surface-overlay: #233554;
+  --color-border-default: #1A2240;
+  --color-border-light: #2B375E;
 
-  --color-border-default: #233554;
-  --color-border-light: #394A6D;
+  --color-success: #4ADE80;
+  --color-warning: #FACC15;
+  --color-error: #FF5C7C;
 
-  --color-success: #00E676;
-  --color-warning: #FFAB00;
-  --color-error: #FF5252;
+  /* Backwards compat for older code paths */
+  --color-primary-dark: #05070F;
+  --color-primary: #0B1226;
+  --color-primary-light: #131B33;
+  --color-accent-blue: #00E5FF;
+  --color-accent-light: #00A8BD;
 
   --font-sans: var(--font-inter);
+  --font-display: var(--font-syne);
   --font-math: var(--font-jetbrains);
 }
 
@@ -33,68 +40,155 @@
 }
 
 html, body {
-  background: #0A192F;
+  background: #05070F;
   color: #FFFFFF;
-  font-family: var(--font-inter), 'Inter', 'Segoe UI', sans-serif;
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: #00D4FF;
-  color: #0A192F;
+  background: #00E5FF;
+  color: #05070F;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #0A192F;
-}
-::-webkit-scrollbar-thumb {
-  background: #233554;
-  border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #394A6D;
-}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #05070F; }
+::-webkit-scrollbar-thumb { background: #1A2240; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2B375E; }
 
 .katex {
   color: #FFFFFF !important;
-  font-size: 1.05em;
 }
 
-.glow-blue {
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.25), 0 0 40px rgba(0, 212, 255, 0.1);
+/* Display utility */
+.font-display {
+  font-family: var(--font-syne), Syne, var(--font-inter), Inter, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
-.text-glow-blue {
-  text-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+.scoreboard {
+  font-family: var(--font-syne), Syne, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
 }
 
+/* Pixel-grid background detail (subtle) */
+.pixel-grid {
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.pixel-grid-fine {
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.glow-cyan {
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.4),
+    0 0 24px rgba(0, 229, 255, 0.18);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 18px rgba(0, 229, 255, 0.7);
+}
+
+.edge-pulse::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 3px rgba(0, 229, 255, 0);
+  animation: edge-pulse 0.55s ease-out 1;
+  z-index: 60;
+}
+
+@keyframes edge-pulse {
+  0% { box-shadow: inset 0 0 0 3px rgba(0, 229, 255, 0.0); }
+  35% { box-shadow: inset 0 0 0 3px rgba(0, 229, 255, 0.8); }
+  100% { box-shadow: inset 0 0 0 3px rgba(0, 229, 255, 0); }
+}
+
+/* XP bar overshoot bounce */
+@keyframes xp-overshoot {
+  0% { transform: scaleX(var(--xp-start, 0)); }
+  60% { transform: scaleX(calc(var(--xp-target, 1) * 1.05)); }
+  100% { transform: scaleX(var(--xp-target, 1)); }
+}
+
+.xp-bar-fill {
+  transform-origin: left center;
+  animation: xp-overshoot 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards;
+}
+
+/* Card flip on correct */
+.flip-card {
+  perspective: 1200px;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.3, 0.8, 0.4, 1);
+  transform-style: preserve-3d;
+}
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-face-back {
+  transform: rotateY(180deg);
+}
+
+/* Reward burst */
+@keyframes reward-zoom {
+  0% { transform: scale(0.4); opacity: 0; }
+  35% { transform: scale(1.05); opacity: 1; }
+  70% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+.reward-stat {
+  animation: reward-zoom 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+
+@keyframes streak-flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: 0.7; }
+  55% { opacity: 1; }
+}
+.flame-flicker { animation: streak-flicker 1.6s ease-in-out infinite; }
+
+/* Quiz feedback - retained but updated */
 @keyframes pulse-correct {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
+  50% { transform: scale(1.03); }
 }
-
 @keyframes shake-wrong {
   0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
+.animate-correct { animation: pulse-correct 0.5s ease-in-out; }
+.animate-wrong { animation: shake-wrong 0.35s ease-in-out; }
 
-.animate-correct {
-  animation: pulse-correct 0.6s ease-in-out;
+/* Sparkline path animation */
+@keyframes sparkline-draw {
+  to { stroke-dashoffset: 0; }
 }
-
-.animate-wrong {
-  animation: shake-wrong 0.45s ease-in-out;
-}
-
-@keyframes glow-ring {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.5); }
-  50% { box-shadow: 0 0 0 8px rgba(0, 212, 255, 0); }
-}
-
-.animate-glow-ring {
-  animation: glow-ring 2s ease-in-out infinite;
+.sparkline-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: sparkline-draw 1.2s ease-out 0.2s forwards;
 }

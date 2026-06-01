@@ -47,7 +47,7 @@ export const CURRICULUM: Grade[] = [
             summary: "Rules of exponents and operations on powers.",
             theory:
               "A power $a^n$ means multiplying $a$ by itself $n$ times. Core rules: $a^m \\cdot a^n = a^{m+n}$, $\\frac{a^m}{a^n} = a^{m-n}$, $(a^m)^n = a^{mn}$, $a^0 = 1$ for $a \\neq 0$, and $a^{-n} = \\frac{1}{a^n}$.",
-            youtubeId: "NCV0LDdwCtY",
+            youtubeId: "ZtTO8uUGy2Y",
             practice: [
               "Simplify $2^3 \\cdot 2^4$",
               "Evaluate $\\frac{5^7}{5^4}$",
@@ -99,7 +99,7 @@ export const CURRICULUM: Grade[] = [
             summary: "Addition, subtraction, multiplication, and identities.",
             theory:
               "A polynomial is an expression of the form $a_n x^n + a_{n-1} x^{n-1} + \\dots + a_0$. Key identities: $(a+b)^2 = a^2 + 2ab + b^2$, $(a-b)^2 = a^2 - 2ab + b^2$, and $a^2 - b^2 = (a-b)(a+b)$.",
-            youtubeId: "Vm7H0VTlrwg",
+            youtubeId: "ZvL9aDGNHqA",
             practice: [
               "Expand $(x+3)^2$",
               "Factor $x^2 - 16$",
@@ -157,7 +157,7 @@ export const CURRICULUM: Grade[] = [
             summary: "Properties, congruence, and angle sums.",
             theory:
               "The sum of interior angles of any triangle equals $180°$. A triangle is equilateral if all sides are equal, isosceles if two sides are equal, scalene if all sides differ. Congruence criteria: SSS, SAS, ASA.",
-            youtubeId: "MEjLnNcv8jw",
+            youtubeId: "D5lZ3thuEeA",
             practice: [
               "Find the third angle of a triangle with angles 50° and 70°.",
               "Classify a triangle with sides 5, 5, 8.",
@@ -221,7 +221,7 @@ export const CURRICULUM: Grade[] = [
             summary: "Solving via factoring and the quadratic formula.",
             theory:
               "A quadratic equation has the form $ax^2 + bx + c = 0$ where $a \\neq 0$. The quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$. The discriminant $D = b^2 - 4ac$ determines the number of real roots: $D>0$ two roots, $D=0$ one root, $D<0$ no real roots.",
-            youtubeId: "i7idZfS8t8w",
+            youtubeId: "qwpxeaz2GBI",
             practice: [
               "Solve $x^2 - 5x + 6 = 0$",
               "Solve $2x^2 + 3x - 2 = 0$ using the formula",
@@ -465,7 +465,7 @@ export const CURRICULUM: Grade[] = [
             summary: "Antiderivatives and the power rule for integration.",
             theory:
               "The indefinite integral is the antiderivative: $\\int f(x) dx = F(x) + C$ where $F'(x) = f(x)$. Power rule: $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ for $n \\neq -1$. Linearity: $\\int (af + bg) dx = a\\int f dx + b\\int g dx$.",
-            youtubeId: "rCWOdfQ3cwQ",
+            youtubeId: "6WUjbJEeJwM",
             practice: [
               "Compute $\\int x^3 dx$",
               "Compute $\\int (2x + 1) dx$",

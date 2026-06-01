@@ -23,58 +23,40 @@ export function Header() {
   const signedIn = state?.email != null;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border-default bg-primary-dark/90 backdrop-blur">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+    <header className="sticky top-0 z-40 border-b border-border-default bg-bg/85 backdrop-blur">
+      <div className="max-w-[720px] mx-auto flex items-center justify-between px-4 md:px-0 py-3.5">
         <Logo />
-        <nav className="hidden md:flex items-center gap-8 text-sm text-text-secondary">
-          <Link href="/grades" className="hover:text-accent-blue transition-colors">
-            Grades
-          </Link>
-          <Link href="/dashboard" className="hover:text-accent-blue transition-colors">
-            Dashboard
-          </Link>
-          <Link href="/#how" className="hover:text-accent-blue transition-colors">
-            How it works
-          </Link>
-        </nav>
         <div className="flex items-center gap-3">
           {signedIn ? (
             <>
               {state!.streak > 0 && (
                 <div className="hidden sm:flex items-center gap-1 text-warning text-sm">
-                  <Flame size={16} />
-                  <span>{state!.streak}</span>
+                  <Flame size={14} className="flame-flicker" />
+                  <span className="scoreboard text-base">{state!.streak}</span>
                 </div>
               )}
               <Link
-                href="/dashboard"
-                className="text-sm px-3 py-1.5 rounded-md border border-border-default hover:border-accent-blue transition-colors"
+                href="/profile"
+                className="font-display text-sm px-2.5 py-1 border border-accent/30 text-accent hover:border-accent transition-colors"
+                style={{ clipPath: "polygon(8% 0, 100% 0, 100% 80%, 92% 100%, 0 100%, 0 20%)" }}
               >
-                Lvl {state!.level} · {state!.xp} XP
+                LVL {state!.level}
               </Link>
               <button
                 onClick={logout}
-                className="text-text-secondary hover:text-error transition-colors"
+                className="text-text-muted hover:text-error transition-colors"
                 aria-label="Sign out"
               >
-                <LogOut size={18} />
+                <LogOut size={16} />
               </button>
             </>
           ) : (
-            <>
-              <Link
-                href="/login"
-                className="text-sm px-3 py-1.5 rounded-md border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-primary-dark transition-colors"
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/register"
-                className="text-sm px-3 py-1.5 rounded-md bg-accent-blue text-primary-dark font-medium hover:bg-accent-light transition-colors"
-              >
-                Get started
-              </Link>
-            </>
+            <Link
+              href="/onboarding"
+              className="font-display text-sm px-3 py-1.5 bg-accent text-bg font-bold hover:bg-accent-dim transition-colors"
+            >
+              START
+            </Link>
           )}
         </div>
       </div>
